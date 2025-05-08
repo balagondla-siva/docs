@@ -1,0 +1,81 @@
+1)Download the spark 3.5.3
+2) download winutils hadoop 3.3.x
+3)python version 3.8
+4)java version 1.8
+5)Pycharm community edition.
+
+Steps:
+1)install the pycharam community edition.
+2)create new project.
+3) select the project folder where it is created.
+4) go to cmd prompt and do
+    1)cd project path
+	   eg: cd C:\Users\BILLE\PycharmProjects\pythonProject
+	2) Install venv:
+	    pip install virtualenv
+        virtualenv pyspark_venv
+        pyspark_venv\Scripts\activate
+    3) pip install pyspark
+
+    4) pip show pyspark
+    5) pip install numpy pandas
+
+5)Extract the downloaded spark version using the winrar to (eg : after extracted: C:\Users\BILLE\Downloads\spark-3.5.3-bin-hadoop3\spark-3.5.3-bin-hadoop3)
+   1)create folder and copy the files which is extracted using the winrar and paste it in the below folder.
+		C:\Spark
+   2)Download winutils for hadoop 3.3.x and place it in the below folders.
+        1)C:\Spark
+		2)C:\Spark\bin
+		3)C:\winutils\bin
+		4)C:\winutils
+
+6)Setup the environment varibales for JAVA_HOME, PYSPARK_HOME, HADOOP_HOME, PYSPARK_PATH
+   1)below are need to add in the system_enviroment variables path
+   
+	C:\Users\BILLE\PycharmProjects\pythonProject\pyspark_env\Scripts
+	C:\Program Files\Java\jdk1.8.0_202\bin
+	C:\Spark\bin
+	C:\winutils\bin
+	C:\windows\system32
+	C:\windows
+	C:\windows\System32\Wbem
+	C:\windows\System32\WindowsPowerShell\v1.0\
+	C:\windows\System32\OpenSSH\
+	C:\MinGW\bin
+    
+
+   2)additional configs:
+     1)JAVA_HOME 
+	   C:\Program Files\Java\jdk1.8.0_202
+	 2)HADOOP_HOME
+	    C:\winutils
+	 3) SPARK_HOME
+	    C:\Spark
+7)In Pycharam setup the python interpretor.
+   1) locate the virtual interpreter which we have configured in step 4.
+     "C:\\Users\\BILLE\\PycharmProjects\\pythonProject\\pyspark_env\\Scripts\\python.exe"
+   2) select and apply.
+   3) verify the all packages whcih are installed in the virtual env.
+8)run sample script.
+   # Set environment variables
+import os
+
+os.environ['JAVA_HOME'] = "C:\\Program Files\\Java\\jdk1.8.0_202"
+os.environ['SPARK_HOME'] = "C:\\Spark"
+os.environ['HADOOP_HOME'] = "C:\\winutils"
+os.environ['PYSPARK_PYTHON'] = "C:\\Users\\BILLE\\PycharmProjects\\pythonProject\\pyspark_env\\Scripts\\python.exe"
+
+from pyspark.sql import SparkSession
+
+spark = SparkSession.builder \
+    .appName("BasicApp") \
+    .getOrCreate()
+
+spark.sparkContext.setLogLevel("DEBUG")
+
+# Create a simple DataFrame
+data = [("Alice", 1), ("Bob", 2)]
+df = spark.createDataFrame(data, ["Name", "Value"])
+df.show()
+
+spark.stop()
