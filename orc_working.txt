@@ -1,0 +1,27 @@
+import pyarrow.orc as orc
+import pandas as pd
+import os
+
+# Specify the local directory containing ORC files
+local_dir = '/home/siva/siva/sample_orc_local/sample_orc_single3/'
+
+# List all files in the directory
+file_paths = os.listdir(local_dir)
+
+# Filter out files that don't have the correct ORC file pattern (e.g., 00000_0, 00001_0, etc.)
+orc_files = [os.path.join(local_dir, file) for file in file_paths if file.endswith('_0')]
+
+# Read all files and combine them into one DataFrame
+dataframes = []
+
+for file_path in orc_files:
+    with open(file_path, 'rb') as f:
+        table = orc.read_table(f)  # Read the ORC file
+        df = table.to_pandas()  # Convert to pandas DataFrame
+        dataframes.append(df)
+
+# Combine all DataFrames into one
+final_df = pd.concat(dataframes, ignore_index=True)
+
+# Show the resulting DataFrame
+print(final_df)
